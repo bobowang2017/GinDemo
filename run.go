@@ -1,6 +1,7 @@
 package main
 
 import (
+	"GinDemo/apis/users"
 	"github.com/gin-gonic/gin"
 )
 
@@ -8,7 +9,7 @@ func main() {
 	router := gin.Default()
 	userRouter := router.Group("/api/v1")
 	{
-		userRouter.GET("/user", UserList)
+		userRouter.GET("/user", users.UserList)
 	}
 	appRouter := router.Group("api/v1")
 	{
