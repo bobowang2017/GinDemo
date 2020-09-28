@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InitRouter() {
+func InitRouter() *gin.Engine {
 	router := gin.New()
 	// 要在路由组之前全局使用「跨域中间件」, 否则OPTIONS会返回404
 	router.Use(Middlewares.Cors())
@@ -29,5 +29,5 @@ func InitRouter() {
 		projectRouter.GET("/project", Controllers.ProjectListController)
 	}
 
-	router.Run(":8080")
+	return router
 }
