@@ -50,34 +50,31 @@ func Set(key string, data interface{}, time int) error {
 }
 
 func Get(key string) (string, error) {
+	/**
+	Redis String get操作
+	*/
 	conn := pool.Get()
 	defer conn.Close()
 	res, err := redis.String(conn.Do("GET", key))
 	if err != nil {
-		return "", err
+		fmt.Println("redis get error:", err)
 	}
 	return res, nil
 }
 
-//func Get(key string) ([]byte, error) {
-//	conn := RedisConn.Get()
-//	defer conn.Close()
-//
-//	reply, err := redis.Bytes(conn.Do("GET", key))
-//	if err != nil {
-//		return nil, err
-//	}
-//
-//	return reply, nil
-//}
-
 func Delete(key string) (bool, error) {
+	/**
+	Redis String delete操作
+	*/
 	conn := pool.Get()
 	defer conn.Close()
 	return redis.Bool(conn.Do("DEL", key))
 }
 
 func Lpush(key string, data []string) error {
+	/**
+	Redis String Lpush操作
+	*/
 	conn := pool.Get()
 	defer conn.Close()
 	_, err := conn.Do("LPUSH", redis.Args{}.Add(key).AddFlat(data)...)
