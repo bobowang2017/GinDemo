@@ -38,11 +38,20 @@ func Set(key string, data interface{}, time int) error {
 	if err != nil {
 		return err
 	}
-	_, err = conn.Do("SET", key, value)
+	_, err = conn.Do("SET", key, value, "EX", 100)
 	if err != nil {
 		return err
 	}
-	_, err = conn.Do("EXPIRE", key, time)
+	return nil
+}
+
+func Expire(key string, time int) error {
+	/**
+	Redis Expire操作
+	*/
+	conn := pool.Get()
+	defer conn.Close()
+	_, err := conn.Do("EXPIRE", key, time)
 	if err != nil {
 		return err
 	}
@@ -83,4 +92,31 @@ func Lpush(key string, data []string) error {
 		return err
 	}
 	return nil
+}
+
+func Hset(key, field, value string) error {
+	/**
+	Redis String Hset操作
+	*/
+	conn := pool.Get()
+	defer conn.Close()
+	_, err := conn.Do("HSET", key, field, value)
+	if err != nil {
+		fmt.Println("redis hset error:", err)
+		return err
+	}
+	return nil
+}
+
+func Hget(key, field string) (string, error) {
+	/**
+	Redis String Hget操作
+	*/
+	conn := pool.Get()
+	defer conn.Close()
+	res, err := redis.String(conn.Do("hget", key, field))
+	if err != nil {
+		fmt.Println("redis hget error", err)
+	}
+	return res, err
 }
