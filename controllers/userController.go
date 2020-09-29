@@ -1,7 +1,7 @@
-package Controllers
+package controllers
 
 import (
-	"GinDemo/Utils/goRedis"
+	"GinDemo/utils/redis"
 	"github.com/gin-gonic/gin"
 )
 
@@ -10,9 +10,9 @@ func UserListController(c *gin.Context) {
 	//	//db.NewRecord(user) // => 主键为空返回`true`
 	//	//db.Create(&user)
 	//	//db.NewRecord(user) //
-	goRedis.Set("hello", "wangxiangbo", 100)
-	res, _ := goRedis.Get("bobo")
-	goRedis.Lpush("list", []string{"1", "2", "3", "4"})
+	redis.Set("hello", "wangxiangbo", 100)
+	res, _ := redis.Get("bobo")
+	redis.Lpush("list", []string{"1", "2", "3", "4"})
 	c.JSON(200, gin.H{
 		"message": res,
 	})

@@ -1,4 +1,4 @@
-package goRedis
+package redis
 
 import (
 	"encoding/json"

@@ -1,4 +1,4 @@
-package Models
+package models
 
 import "time"
 
@@ -11,4 +11,8 @@ type User struct {
 	Birthday    time.Time
 	CreatedTime time.Time
 	UpdatedTime time.Time
+}
+
+func AddUser(u *User) {
+	DB.Create(u)
 }

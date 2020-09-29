@@ -1,18 +1,18 @@
-package Router
+package router
 
 import (
-	"GinDemo/Controllers"
-	"GinDemo/Middlewares"
+	"GinDemo/controllers"
+	"GinDemo/middlewares"
 	"github.com/gin-gonic/gin"
 )
 
 func InitRouter() *gin.Engine {
 	router := gin.New()
 	// 要在路由组之前全局使用「跨域中间件」, 否则OPTIONS会返回404
-	router.Use(Middlewares.Cors())
+	router.Use(middlewares.Cors())
 	userRouter := router.Group("/api/v1")
 	{
-		userRouter.GET("/user", Controllers.UserListController)
+		userRouter.GET("/user", controllers.UserListController)
 	}
 
 	appRouter := router.Group("api/v1")
@@ -26,7 +26,7 @@ func InitRouter() *gin.Engine {
 
 	projectRouter := router.Group("api/v1")
 	{
-		projectRouter.GET("/project", Controllers.ProjectListController)
+		projectRouter.GET("/project", controllers.ProjectListController)
 	}
 
 	return router
