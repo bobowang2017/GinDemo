@@ -12,7 +12,3 @@ type User struct {
 	CreatedTime time.Time
 	UpdatedTime time.Time
 }
-
-func AddUser(u *User) {
-	DB.Create(u)
-}

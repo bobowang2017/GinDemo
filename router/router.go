@@ -26,7 +26,8 @@ func InitRouter() *gin.Engine {
 
 	projectRouter := router.Group("api/v1")
 	{
-		projectRouter.GET("/project", controllers.ProjectListController)
+		projectRouter.GET("/projects", controllers.ProjectListController)
+		projectRouter.POST("/projects", controllers.ProjectCreController)
 	}
 
 	return router
