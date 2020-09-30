@@ -15,7 +15,13 @@ func ProjectListController(c *gin.Context) {
 }
 
 func ProjectCreController(c *gin.Context) {
-	user := models.User{Name: "WangBoBo", Sex: 18, Birthday: time.Now()}
+	user := models.User{
+		Name:     "WangBoBo",
+		Sex:      18,
+		Birthday: time.Now(),
+		Username: "bobowang",
+		Password: "123456",
+	}
 	models.GetDB().Create(&user)
 	defer models.GetDB().Close()
 	c.JSON(200, gin.H{

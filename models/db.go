@@ -16,8 +16,8 @@ func getConn() *gorm.DB {
 	if err != nil {
 		fmt.Println(err)
 	}
-	db.DB().SetMaxIdleConns(30)
-	db.DB().SetMaxOpenConns(30)
+	db.DB().SetMaxIdleConns(3000)
+	db.DB().SetMaxOpenConns(3000)
 	db.DB().SetConnMaxLifetime(time.Second * 300)
 	db.SingularTable(true)
 	if err := db.DB().Ping(); err != nil {
