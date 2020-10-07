@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func ProjectListController(c *gin.Context) {
+func ProjectListCtrl(c *gin.Context) {
 	users := models.GetDB().Find(&models.User{})
 	defer models.GetDB().Close()
 	c.JSON(200, gin.H{
@@ -14,7 +14,7 @@ func ProjectListController(c *gin.Context) {
 	})
 }
 
-func ProjectCreController(c *gin.Context) {
+func ProjectCreCtrl(c *gin.Context) {
 	user := models.User{
 		Name:     "WangBoBo",
 		Sex:      18,

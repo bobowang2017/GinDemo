@@ -1,6 +1,7 @@
-package utils
+package redis
 
 import (
+	"GinDemo/config"
 	"encoding/json"
 	"fmt"
 	"github.com/gomodule/redigo/redis"
@@ -12,11 +13,11 @@ var pool *redis.Pool
 func SetUpRedis() {
 	pool = &redis.Pool{
 		// 从配置文件获取maxidle以及maxactive，取不到则用后面的默认值
-		MaxIdle:     30,
-		MaxActive:   30000,
+		MaxIdle:     config.RedisSetting.MaxIdle,
+		MaxActive:   config.RedisSetting.MaxActive,
 		IdleTimeout: 2 * time.Second,
 		Dial: func() (redis.Conn, error) {
-			c, err := redis.Dial("tcp", "127.0.0.1:6379")
+			c, err := redis.Dial("tcp", config.RedisSetting.Host)
 			if err != nil {
 				fmt.Println(err)
 				return nil, err

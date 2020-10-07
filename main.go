@@ -1,22 +1,20 @@
 package main
 
 import (
+	"GinDemo/config"
 	"GinDemo/router"
-	"GinDemo/utils"
-	"github.com/gin-gonic/gin"
-	"io"
-	"os"
+	"GinDemo/utils/logger"
+	"GinDemo/utils/redis"
 )
 
 func SetUp() {
-	utils.InitConfigIni("./config/setting.ini")
-	utils.SetUpRedis()
+	config.Setup()
+	redis.SetUpRedis()
+	logger.SetupLog()
 }
 
 func main() {
 	SetUp()
 	router := router.InitRouter()
-	f, _ := os.Create("gin.log")
-	gin.DefaultWriter = io.MultiWriter(f)
 	router.Run()
 }

@@ -13,12 +13,12 @@ func InitRouter() *gin.Engine {
 
 	testRouter := router.Group("/api/v1")
 	{
-		testRouter.GET("/test", c.TestController)
+		testRouter.GET("/test", c.TestCtrl)
 	}
 
 	userRouter := router.Group("/api/v1")
 	{
-		userRouter.GET("/user", c.UserListController)
+		userRouter.GET("/user", c.UserListCtrl)
 	}
 
 	appRouter := router.Group("api/v1")
@@ -32,8 +32,8 @@ func InitRouter() *gin.Engine {
 
 	projectRouter := router.Group("api/v1")
 	{
-		projectRouter.GET("/projects", c.ProjectListController)
-		projectRouter.POST("/projects", c.ProjectCreController)
+		projectRouter.GET("/projects", c.ProjectListCtrl)
+		projectRouter.POST("/projects", c.ProjectCreCtrl)
 	}
 
 	return router
