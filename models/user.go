@@ -1,6 +1,8 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 type User struct {
 	ID          int    `gorm:"AUTO_INCREMENT"`   // 自增
@@ -11,4 +13,35 @@ type User struct {
 	Birthday    time.Time
 	CreatedTime *time.Time `gorm:"default:null"`
 	UpdatedTime time.Time
+}
+
+func AddUser(data map[string]interface{}) error {
+	article := User{
+		Username: data["Username"].(string),
+		Password: data["Password"].(string),
+		Name:     data["Name"].(string),
+		Sex:      data["Sex"].(int),
+		Birthday: data["Birthday"].(time.Time),
+	}
+	if err := db.Create(&article).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func ListUser(PageNum, PageSize int, params map[string]string) ([]*User, error) {
+	var users []*User
+	err := db.Find(&users).Offset((PageNum - 1) * PageSize).Limit(PageNum).Error
+	if err != nil {
+		return nil, err
+	}
+	return users, nil
+}
+
+func DeleteById(userId int) error {
+	err := db.Delete(&User{ID: userId}).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }

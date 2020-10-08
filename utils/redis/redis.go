@@ -10,7 +10,7 @@ import (
 
 var pool *redis.Pool
 
-func SetUpRedis() {
+func SetUp() {
 	pool = &redis.Pool{
 		// 从配置文件获取maxidle以及maxactive，取不到则用后面的默认值
 		MaxIdle:     config.RedisSetting.MaxIdle,

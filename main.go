@@ -2,6 +2,7 @@ package main
 
 import (
 	"GinDemo/config"
+	"GinDemo/models"
 	"GinDemo/router"
 	"GinDemo/utils/logger"
 	"GinDemo/utils/redis"
@@ -9,8 +10,9 @@ import (
 
 func SetUp() {
 	config.Setup()
-	redis.SetUpRedis()
-	logger.SetupLog()
+	redis.SetUp()
+	logger.Setup()
+	models.Setup()
 }
 
 func main() {

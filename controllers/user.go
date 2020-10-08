@@ -1,19 +1,36 @@
 package controllers
 
 import (
-	"GinDemo/utils/redis"
+	"GinDemo/service"
 	"github.com/gin-gonic/gin"
+	"strconv"
 )
 
 func UserListCtrl(c *gin.Context) {
-	//user := Models.User{Name: "Jinzhu", Age: 18, Birthday: time.Now()}
-	//	//db.NewRecord(user) // => 主键为空返回`true`
-	//	//db.Create(&user)
-	//	//db.NewRecord(user) //
-	redis.Set("hello", "wangxiangbo", 100)
-	res, _ := redis.Get("bobo")
-	redis.Lpush("list", []string{"1", "2", "3", "4"})
+	pageNum, pageSize := c.DefaultQuery("PageNum", "10"), c.DefaultQuery("PageSize", "1")
+	num, _ := strconv.Atoi(pageNum)
+	size, _ := strconv.Atoi(pageSize)
+	res, err := service.ListUser(num, size, nil)
+	if err != nil {
+		c.JSON(200, gin.H{
+			"message": err,
+		})
+	}
 	c.JSON(200, gin.H{
 		"message": res,
 	})
+}
+
+func UserAddCtrl(c *gin.Context) {
+	var userDto service.UserDto
+	c.BindJSON(&userDto)
+	service.CreateUser(&userDto)
+	c.JSON(200, gin.H{
+		"message": "success",
+	})
+}
+
+func UserDelCtrl(c *gin.Context) {
+	userId, _ := strconv.Atoi(c.Param("userId"))
+	service.DelByUserId(userId)
 }

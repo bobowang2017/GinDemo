@@ -18,7 +18,9 @@ func InitRouter() *gin.Engine {
 
 	userRouter := router.Group("/api/v1")
 	{
-		userRouter.GET("/user", c.UserListCtrl)
+		userRouter.GET("/users", c.UserListCtrl)
+		userRouter.POST("/users", c.UserAddCtrl)
+		userRouter.DELETE("/users/:userId", c.UserDelCtrl)
 	}
 
 	appRouter := router.Group("api/v1")
