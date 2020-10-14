@@ -33,7 +33,7 @@ func Setup() {
 	//gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
 	//	return config.DatabaseSetting.TablePrefix + defaultTableName
 	//}
-
+	db.LogMode(true)
 	db.SingularTable(true)
 	db.Callback().Create().Replace("gorm:update_time_stamp", updateTimeStampForCreateCallback)
 	db.Callback().Update().Replace("gorm:update_time_stamp", updateTimeStampForUpdateCallback)

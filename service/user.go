@@ -16,7 +16,7 @@ type UserDto struct {
 	PageSize int
 }
 
-func CreateUser(u *UserDto) error {
+func (u *UserDto) CreateUser() error {
 	article := map[string]interface{}{
 		"Username": u.Username,
 		"Password": u.Password,
@@ -30,10 +30,10 @@ func CreateUser(u *UserDto) error {
 	return nil
 }
 
-func ListUser(PageNum, PageSize int, param map[string]string) ([]*models.User, error) {
+func (u *UserDto) ListUser(PageNum, PageSize int, param map[string]string) ([]*models.User, error) {
 	return models.ListUser(PageNum, PageSize, param)
 }
 
-func DelByUserId(userId int) error {
+func (u *UserDto) DelByUserId(userId int) error {
 	return models.DeleteById(userId)
 }
