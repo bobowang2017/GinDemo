@@ -134,3 +134,16 @@ func IncrBy(key string, cnt int) (int64, error) {
 	}
 	return res, nil
 }
+
+func DecrBy(key string, cnt int) (int64, error) {
+	/**
+	Redis String IncrBy
+	*/
+	conn := pool.Get()
+	defer conn.Close()
+	res, err := redis.Int64(conn.Do("DecrBy", key, cnt))
+	if err != nil {
+		fmt.Println("redis DecrBy error:", err)
+	}
+	return res, nil
+}
