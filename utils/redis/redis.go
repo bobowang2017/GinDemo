@@ -121,3 +121,16 @@ func Hget(key, field string) (string, error) {
 	}
 	return res, err
 }
+
+func IncrBy(key string, cnt int) (int64, error) {
+	/**
+	Redis String IncrBy
+	*/
+	conn := pool.Get()
+	defer conn.Close()
+	res, err := redis.Int64(conn.Do("INCRBY", key, cnt))
+	if err != nil {
+		fmt.Println("redis incrby error:", err)
+	}
+	return res, nil
+}
