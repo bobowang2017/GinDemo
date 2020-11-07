@@ -20,9 +20,9 @@ func AddUser(user *User) error {
 	return nil
 }
 
-func ListUser(PageNum, PageSize int, params map[string]string) ([]*User, error) {
+func ListUser(PageNum, PageSize int, params map[string]interface{}) ([]*User, error) {
 	var users []*User
-	err := db.Offset((PageNum - 1) * PageSize).Limit(PageSize).Find(&users).Error
+	err := db.Offset((PageNum - 1) * PageSize).Limit(PageSize).Where(params).Find(&users).Error
 	if err != nil {
 		return nil, err
 	}
@@ -47,4 +47,13 @@ func UpdateById(userId int, params map[string]interface{}) error {
 		return err
 	}
 	return nil
+}
+
+func SearchUser(params map[string]interface{}) ([]*User, error) {
+	var users []*User
+	err := db.Where(params).Find(&users).Error
+	if err != nil {
+		return nil, err
+	}
+	return users, nil
 }

@@ -23,7 +23,7 @@ func (u *UserDto) CreateUser() error {
 	return nil
 }
 
-func (u *UserDto) ListUser(PageNum, PageSize int, param map[string]string) ([]*models.User, error) {
+func (u *UserDto) ListUser(PageNum, PageSize int, param map[string]interface{}) ([]*models.User, error) {
 	return models.ListUser(PageNum, PageSize, param)
 }
 
@@ -34,4 +34,8 @@ func (u *UserDto) DelByUserId(userId int) error {
 
 func (u *UserDto) UpdateByUserId(userId int, params map[string]interface{}) error {
 	return models.UpdateById(userId, params)
+}
+
+func (u *UserDto) SearchUser(params map[string]interface{}) ([]*models.User, error) {
+	return models.SearchUser(params)
 }
