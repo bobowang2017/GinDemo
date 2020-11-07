@@ -2,29 +2,22 @@ package service
 
 import (
 	"GinDemo/models"
-	"time"
 )
 
 type UserDto struct {
-	Username string
-	Password string
-	Name     string
-	Sex      int
-	Birthday time.Time
-
+	models.User
 	PageNum  int
 	PageSize int
 }
 
 func (u *UserDto) CreateUser() error {
-	article := map[string]interface{}{
-		"Username": u.Username,
-		"Password": u.Password,
-		"Name":     u.Name,
-		"Sex":      u.Sex,
-		"Birthday": u.Birthday,
+	user := &models.User{
+		Username: u.Username,
+		Password: u.Password,
+		Name:     u.Name,
+		Birthday: u.Birthday,
 	}
-	if err := models.AddUser(article); err != nil {
+	if err := models.AddUser(user); err != nil {
 		return err
 	}
 	return nil
@@ -35,5 +28,10 @@ func (u *UserDto) ListUser(PageNum, PageSize int, param map[string]string) ([]*m
 }
 
 func (u *UserDto) DelByUserId(userId int) error {
+	//return nil
 	return models.DeleteById(userId)
+}
+
+func (u *UserDto) UpdateByUserId(userId int, params map[string]interface{}) error {
+	return models.UpdateById(userId, params)
 }
