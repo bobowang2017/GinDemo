@@ -1,12 +1,14 @@
 package controllers
 
 import (
+	"GinDemo/common/e"
 	"GinDemo/service"
+	"GinDemo/utils/logger"
 	"github.com/gin-gonic/gin"
 	"strconv"
 )
 
-func UserListCtrl(c *gin.Context) {
+func UserListCtrl(c *gin.Context) interface{} {
 	pageNum := c.DefaultQuery("PageNum", "1")
 	pageSize := c.DefaultQuery("PageSize", "10")
 	num, _ := strconv.Atoi(pageNum)
@@ -23,49 +25,50 @@ func UserListCtrl(c *gin.Context) {
 	var userDto service.UserDto
 	res, err := userDto.ListUser(num, size, params)
 	if err != nil {
-		c.JSON(200, gin.H{
-			"message": err,
-		})
+		logger.Error(err)
+		return e.ServerError()
 	}
-	c.JSON(200, gin.H{
-		"status": 200,
-		"msg":    "ok",
-		"data":   res,
-	})
+	return res
 }
 
-func UserAddCtrl(c *gin.Context) {
+func UserAddCtrl(c *gin.Context) interface{} {
 	var userDto service.UserDto
 	c.BindJSON(&userDto)
-	userDto.CreateUser()
-	c.JSON(200, gin.H{
-		"message": "success",
-	})
+	err := userDto.CreateUser()
+	if err != nil {
+		logger.Error(err)
+		return e.ServerError()
+	}
+	return "success"
 }
 
-func UserDelCtrl(c *gin.Context) {
+func UserDelCtrl(c *gin.Context) interface{} {
 	var userDto service.UserDto
 	userId, _ := strconv.Atoi(c.Param("userId"))
-	userDto.DelByUserId(userId)
-	c.JSON(200, gin.H{
-		"message": "success",
-	})
+	err := userDto.DelByUserId(userId)
+	if err != nil {
+		logger.Error(err)
+		return e.ServerError()
+	}
+	return "success"
 }
 
-func UserUpdateCtrl(c *gin.Context) {
+func UserUpdateCtrl(c *gin.Context) interface{} {
 	var userDto service.UserDto
 	userId, _ := strconv.Atoi(c.Param("userId"))
 	params := map[string]interface{}{
 		"name": "wangxiangbo",
 		"sex":  88,
 	}
-	userDto.UpdateByUserId(userId, params)
-	c.JSON(200, gin.H{
-		"message": "success",
-	})
+	err := userDto.UpdateByUserId(userId, params)
+	if err != nil {
+		logger.Error(err)
+		return e.ServerError()
+	}
+	return "success"
 }
 
-func UserTestCtrl(c *gin.Context) {
+func UserTestCtrl(c *gin.Context) interface{} {
 	Username := c.Query("Username")
 	var userDto service.UserDto
 	param := map[string]interface{}{
@@ -73,16 +76,7 @@ func UserTestCtrl(c *gin.Context) {
 	}
 	res, err := userDto.SearchUser(param)
 	if err != nil {
-		c.JSON(200, gin.H{
-			"status":  500,
-			"message": err,
-		})
-	} else {
-		c.JSON(200, gin.H{
-			"status":  200,
-			"message": "ok",
-			"data":    res,
-		})
+		return e.ServerError()
 	}
-
+	return res
 }

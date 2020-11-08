@@ -1,6 +1,7 @@
 package router
 
 import (
+	"GinDemo/common/e"
 	c "GinDemo/controllers"
 	"GinDemo/middlewares"
 	"github.com/gin-gonic/gin"
@@ -18,11 +19,12 @@ func InitRouter() *gin.Engine {
 
 	userRouter := router.Group("/api/v1")
 	{
-		userRouter.GET("/users", c.UserListCtrl)
-		userRouter.POST("/users", c.UserAddCtrl)
-		userRouter.DELETE("/users/:userId", c.UserDelCtrl)
-		userRouter.PUT("/users/:userId", c.UserUpdateCtrl)
-		userRouter.GET("/users/test", c.UserTestCtrl)
+		userRouter.Use(middlewares.Auth())
+		userRouter.GET("/users", e.Wrapper(c.UserListCtrl))
+		userRouter.POST("/users", e.Wrapper(c.UserAddCtrl))
+		userRouter.DELETE("/users/:userId", e.Wrapper(c.UserDelCtrl))
+		userRouter.PUT("/users/:userId", e.Wrapper(c.UserUpdateCtrl))
+		userRouter.GET("/users/test", e.Wrapper(c.UserTestCtrl))
 	}
 
 	appRouter := router.Group("api/v1")
