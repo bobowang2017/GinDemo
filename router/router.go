@@ -17,29 +17,29 @@ func InitRouter() *gin.Engine {
 		testRouter.GET("/test", c.TestCtrl)
 	}
 
-	userRouter := router.Group("/api/v1")
+	userRouter := router.Group("/api/v1/users")
 	{
 		userRouter.Use(middlewares.Auth())
-		userRouter.GET("/users", e.Wrapper(c.UserListCtrl))
-		userRouter.POST("/users", e.Wrapper(c.UserAddCtrl))
-		userRouter.DELETE("/users/:userId", e.Wrapper(c.UserDelCtrl))
-		userRouter.PUT("/users/:userId", e.Wrapper(c.UserUpdateCtrl))
-		userRouter.GET("/users/test", e.Wrapper(c.UserTestCtrl))
+		userRouter.GET("/", e.Wrapper(c.UserListCtrl))
+		userRouter.POST("/", e.Wrapper(c.UserAddCtrl))
+		userRouter.DELETE("/:userId", e.Wrapper(c.UserDelCtrl))
+		userRouter.PUT("/:userId", e.Wrapper(c.UserUpdateCtrl))
+		userRouter.GET("/test", e.Wrapper(c.UserTestCtrl))
 	}
 
-	appRouter := router.Group("api/v1")
+	appRouter := router.Group("api/v1/apps")
 	{
-		appRouter.GET("/app", func(c *gin.Context) {
+		appRouter.GET("/", func(c *gin.Context) {
 			c.JSON(200, gin.H{
 				"message": "Apps",
 			})
 		})
 	}
 
-	projectRouter := router.Group("api/v1")
+	projectRouter := router.Group("api/v1/projects")
 	{
-		projectRouter.GET("/projects", c.ProjectListCtrl)
-		projectRouter.POST("/projects", c.ProjectCreCtrl)
+		projectRouter.GET("/", c.ProjectListCtrl)
+		projectRouter.POST("/", c.ProjectCreCtrl)
 	}
 
 	return router

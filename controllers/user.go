@@ -33,7 +33,9 @@ func UserListCtrl(c *gin.Context) interface{} {
 
 func UserAddCtrl(c *gin.Context) interface{} {
 	var userDto service.UserDto
-	c.BindJSON(&userDto)
+	if err := c.BindJSON(&userDto); err != nil {
+		return e.ParameterError(err.Error())
+	}
 	err := userDto.CreateUser()
 	if err != nil {
 		logger.Error(err)
