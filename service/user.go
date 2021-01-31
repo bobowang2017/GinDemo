@@ -4,18 +4,15 @@ import (
 	"GinDemo/models"
 )
 
-type UserDto struct {
-	models.User
-	PageNum  int
-	PageSize int
+type UserService struct {
 }
 
-func (u *UserDto) CreateUser() error {
+func (u *UserService) CreateUser(o models.User) error {
 	user := &models.User{
-		Username: u.Username,
-		Password: u.Password,
-		Name:     u.Name,
-		Birthday: u.Birthday,
+		Username: o.Username,
+		Password: o.Password,
+		Name:     o.Name,
+		Birthday: o.Birthday,
 	}
 	if err := models.AddUser(user); err != nil {
 		return err
@@ -23,19 +20,19 @@ func (u *UserDto) CreateUser() error {
 	return nil
 }
 
-func (u *UserDto) ListUser(PageNum, PageSize int, param map[string]interface{}) ([]*models.User, error) {
+func (u *UserService) ListUser(PageNum, PageSize int, param map[string]interface{}) ([]*models.User, error) {
 	return models.ListUser(PageNum, PageSize, param)
 }
 
-func (u *UserDto) DelByUserId(userId int) error {
+func (u *UserService) DelByUserId(userId int) error {
 	//return nil
 	return models.DeleteById(userId)
 }
 
-func (u *UserDto) UpdateByUserId(userId int, params map[string]interface{}) error {
+func (u *UserService) UpdateByUserId(userId int, params map[string]interface{}) error {
 	return models.UpdateById(userId, params)
 }
 
-func (u *UserDto) SearchUser(params map[string]interface{}) ([]*models.User, error) {
+func (u *UserService) SearchUser(params map[string]interface{}) ([]*models.User, error) {
 	return models.SearchUser(params)
 }

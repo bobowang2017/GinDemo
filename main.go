@@ -17,6 +17,6 @@ func SetUp() {
 
 func main() {
 	SetUp()
-	router := router.InitRouter()
-	router.Run()
+	routers := router.InitRouter()
+	routers.Run()
 }

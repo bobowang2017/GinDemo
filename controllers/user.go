@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"GinDemo/common/e"
+	"GinDemo/dto"
 	"GinDemo/service"
 	"GinDemo/utils/logger"
 	"github.com/gin-gonic/gin"
@@ -22,8 +23,8 @@ func UserListCtrl(c *gin.Context) interface{} {
 	if name != "" {
 		params["name"] = name
 	}
-	var userDto service.UserDto
-	res, err := userDto.ListUser(num, size, params)
+
+	res, err := (&service.UserService{}).ListUser(num, size, params)
 	if err != nil {
 		logger.Error(err)
 		return e.ServerError()
@@ -32,22 +33,15 @@ func UserListCtrl(c *gin.Context) interface{} {
 }
 
 func UserAddCtrl(c *gin.Context) interface{} {
-	var userDto service.UserDto
-	if err := c.BindJSON(&userDto); err != nil {
+	if err := c.BindJSON(&dto.UserDto{}); err != nil {
 		return e.ParameterError(err.Error())
-	}
-	err := userDto.CreateUser()
-	if err != nil {
-		logger.Error(err)
-		return e.ServerError()
 	}
 	return "success"
 }
 
 func UserDelCtrl(c *gin.Context) interface{} {
-	var userDto service.UserDto
 	userId, _ := strconv.Atoi(c.Param("userId"))
-	err := userDto.DelByUserId(userId)
+	err := (&service.UserService{}).DelByUserId(userId)
 	if err != nil {
 		logger.Error(err)
 		return e.ServerError()
@@ -56,13 +50,12 @@ func UserDelCtrl(c *gin.Context) interface{} {
 }
 
 func UserUpdateCtrl(c *gin.Context) interface{} {
-	var userDto service.UserDto
 	userId, _ := strconv.Atoi(c.Param("userId"))
 	params := map[string]interface{}{
 		"name": "wangxiangbo",
 		"sex":  88,
 	}
-	err := userDto.UpdateByUserId(userId, params)
+	err := (&service.UserService{}).UpdateByUserId(userId, params)
 	if err != nil {
 		logger.Error(err)
 		return e.ServerError()
@@ -72,11 +65,10 @@ func UserUpdateCtrl(c *gin.Context) interface{} {
 
 func UserTestCtrl(c *gin.Context) interface{} {
 	Username := c.Query("Username")
-	var userDto service.UserDto
 	param := map[string]interface{}{
 		"Username": Username,
 	}
-	res, err := userDto.SearchUser(param)
+	res, err := (&service.UserService{}).SearchUser(param)
 	if err != nil {
 		return e.ServerError()
 	}
