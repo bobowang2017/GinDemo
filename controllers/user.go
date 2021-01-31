@@ -9,7 +9,19 @@ import (
 	"strconv"
 )
 
-func UserListCtrl(c *gin.Context) interface{} {
+type UserController struct {
+}
+
+func UserRouterRegister(router *gin.RouterGroup) {
+	user := UserController{}
+	router.POST("/", e.Wrapper(user.UserList))
+	router.GET("/", e.Wrapper(user.UserAdd))
+	router.DELETE("/:userId", e.Wrapper(user.UserDel))
+	router.PUT("/:userId", e.Wrapper(user.UserUpdate))
+	router.GET("/test", e.Wrapper(user.UserTest))
+}
+
+func (u *UserController) UserList(c *gin.Context) interface{} {
 	pageNum := c.DefaultQuery("PageNum", "1")
 	pageSize := c.DefaultQuery("PageSize", "10")
 	num, _ := strconv.Atoi(pageNum)
@@ -32,14 +44,14 @@ func UserListCtrl(c *gin.Context) interface{} {
 	return res
 }
 
-func UserAddCtrl(c *gin.Context) interface{} {
+func (u *UserController) UserAdd(c *gin.Context) interface{} {
 	if err := c.BindJSON(&dto.UserDto{}); err != nil {
 		return e.ParameterError(err.Error())
 	}
 	return "success"
 }
 
-func UserDelCtrl(c *gin.Context) interface{} {
+func (u *UserController) UserDel(c *gin.Context) interface{} {
 	userId, _ := strconv.Atoi(c.Param("userId"))
 	err := (&service.UserService{}).DelByUserId(userId)
 	if err != nil {
@@ -49,7 +61,7 @@ func UserDelCtrl(c *gin.Context) interface{} {
 	return "success"
 }
 
-func UserUpdateCtrl(c *gin.Context) interface{} {
+func (u *UserController) UserUpdate(c *gin.Context) interface{} {
 	userId, _ := strconv.Atoi(c.Param("userId"))
 	params := map[string]interface{}{
 		"name": "wangxiangbo",
@@ -63,7 +75,7 @@ func UserUpdateCtrl(c *gin.Context) interface{} {
 	return "success"
 }
 
-func UserTestCtrl(c *gin.Context) interface{} {
+func (u *UserController) UserTest(c *gin.Context) interface{} {
 	Username := c.Query("Username")
 	param := map[string]interface{}{
 		"Username": Username,

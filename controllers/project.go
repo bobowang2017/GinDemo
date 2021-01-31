@@ -4,13 +4,22 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ProjectListCtrl(c *gin.Context) {
+type ProjectController struct {
+}
+
+func ProjectRouterRegister(router *gin.RouterGroup) {
+	project := ProjectController{}
+	router.POST("/", project.ProjectCre)
+	router.GET("/", project.ProjectList)
+}
+
+func (p *ProjectController) ProjectList(c *gin.Context) {
 	c.JSON(200, gin.H{
-		"message": "",
+		"message": "Project List",
 	})
 }
 
-func ProjectCreCtrl(c *gin.Context) {
+func (p *ProjectController) ProjectCre(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "Projects",
 	})
