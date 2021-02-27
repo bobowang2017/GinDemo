@@ -10,12 +10,15 @@ import (
 )
 
 type UserController struct {
+	userService service.UserService
 }
 
 func UserRouterRegister(router *gin.RouterGroup) {
-	user := UserController{}
-	router.POST("/", e.Wrapper(user.UserList))
-	router.GET("/", e.Wrapper(user.UserAdd))
+	user := UserController{
+		service.NewUserService(),
+	}
+	router.GET("/", e.Wrapper(user.UserList))
+	router.POST("/", e.Wrapper(user.UserAdd))
 	router.DELETE("/:userId", e.Wrapper(user.UserDel))
 	router.PUT("/:userId", e.Wrapper(user.UserUpdate))
 	router.GET("/test", e.Wrapper(user.UserTest))
@@ -36,7 +39,7 @@ func (u *UserController) UserList(c *gin.Context) interface{} {
 		params["name"] = name
 	}
 
-	res, err := (&service.UserService{}).ListUser(num, size, params)
+	res, err := u.userService.ListUser(num, size, params)
 	if err != nil {
 		logger.Error(err)
 		return e.ServerError()
@@ -53,7 +56,7 @@ func (u *UserController) UserAdd(c *gin.Context) interface{} {
 
 func (u *UserController) UserDel(c *gin.Context) interface{} {
 	userId, _ := strconv.Atoi(c.Param("userId"))
-	err := (&service.UserService{}).DelByUserId(userId)
+	err := u.userService.DelByUserId(userId)
 	if err != nil {
 		logger.Error(err)
 		return e.ServerError()
@@ -67,7 +70,7 @@ func (u *UserController) UserUpdate(c *gin.Context) interface{} {
 		"name": "wangxiangbo",
 		"sex":  88,
 	}
-	err := (&service.UserService{}).UpdateByUserId(userId, params)
+	err := u.userService.UpdateByUserId(userId, params)
 	if err != nil {
 		logger.Error(err)
 		return e.ServerError()
@@ -80,7 +83,7 @@ func (u *UserController) UserTest(c *gin.Context) interface{} {
 	param := map[string]interface{}{
 		"Username": Username,
 	}
-	res, err := (&service.UserService{}).SearchUser(param)
+	res, err := u.userService.SearchUser(param)
 	if err != nil {
 		return e.ServerError()
 	}

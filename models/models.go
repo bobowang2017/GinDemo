@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-var db *gorm.DB
+var DB *gorm.DB
 
 type BaseModel struct {
 	ID          int       `gorm:"primary_key;AUTO_INCREMENT" json:"id"`
@@ -20,7 +20,7 @@ type BaseModel struct {
 // Setup initializes the database instance
 func Setup() {
 	var err error
-	db, err = gorm.Open(config.DatabaseSetting.Type, fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
+	DB, err = gorm.Open(config.DatabaseSetting.Type, fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		config.DatabaseSetting.User,
 		config.DatabaseSetting.Password,
 		config.DatabaseSetting.Host,
@@ -33,18 +33,18 @@ func Setup() {
 	//gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
 	//	return config.DatabaseSetting.TablePrefix + defaultTableName
 	//}
-	db.LogMode(true)
-	db.SingularTable(true)
-	db.Callback().Create().Replace("gorm:update_time_stamp", updateTimeStampForCreateCallback)
-	db.Callback().Update().Replace("gorm:update_time_stamp", updateTimeStampForUpdateCallback)
+	DB.LogMode(true)
+	DB.SingularTable(true)
+	DB.Callback().Create().Replace("gorm:update_time_stamp", updateTimeStampForCreateCallback)
+	DB.Callback().Update().Replace("gorm:update_time_stamp", updateTimeStampForUpdateCallback)
 	//db.Callback().Delete().Replace("gorm:delete", deleteCallback)
-	db.DB().SetMaxIdleConns(10)
-	db.DB().SetMaxOpenConns(100)
+	DB.DB().SetMaxIdleConns(10)
+	DB.DB().SetMaxOpenConns(100)
 }
 
 // CloseDB closes database connection (unnecessary)
 func CloseDB() {
-	defer db.Close()
+	defer DB.Close()
 }
 
 // updateTimeStampForCreateCallback will set `CreatedOn`, `ModifiedOn` when creating

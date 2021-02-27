@@ -18,7 +18,7 @@ func InitRouter() *gin.Engine {
 
 	userRouter := router.Group("/api/v1/users")
 	{
-		userRouter.Use(middlewares.Auth())
+		//userRouter.Use(middlewares.Auth())
 		c.UserRouterRegister(userRouter)
 	}
 
