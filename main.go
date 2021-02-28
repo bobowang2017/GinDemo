@@ -6,6 +6,8 @@ import (
 	"GinDemo/router"
 	"GinDemo/utils/logger"
 	"GinDemo/utils/redis"
+	"github.com/robfig/cron"
+	"log"
 )
 
 func SetUp() {
@@ -17,6 +19,15 @@ func SetUp() {
 
 func main() {
 	SetUp()
+	c := cron.New()
+	c.AddFunc("* * * * * *", func() {
+		log.Println("Run models.CleanAllTag...")
+	})
+	c.AddFunc("* * * * * *", func() {
+		log.Println("Run models.CleanAllArticle...")
+	})
+
+	c.Start()
 	routers := router.InitRouter()
 	routers.Run()
 }
