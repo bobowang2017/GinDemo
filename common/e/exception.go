@@ -28,12 +28,12 @@ func newAPIException(status int, msg string) *APIException {
 }
 
 // 500 错误处理
-func ServerError() *APIException {
-	return newAPIException(SERVER_ERROR, http.StatusText(http.StatusInternalServerError))
+func ServerError(message string) *APIException {
+	return newAPIException(SERVER_ERROR, message)
 }
 
 // 404 错误
-func NotFound() *APIException {
+func NotFound(message string) *APIException {
 	return newAPIException(NOT_FOUND, http.StatusText(http.StatusNotFound))
 }
 

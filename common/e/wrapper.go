@@ -24,7 +24,7 @@ func Wrapper(handler HandlerFunc) func(c *gin.Context) {
 					apiException = UnknownError(e.Error())
 				}
 			} else {
-				apiException = ServerError()
+				apiException = ServerError(e.Error())
 			}
 			c.JSON(200, apiException)
 		} else {

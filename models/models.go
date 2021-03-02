@@ -2,6 +2,7 @@ package models
 
 import (
 	"GinDemo/config"
+	"GinDemo/utils"
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -12,9 +13,9 @@ import (
 var DB *gorm.DB
 
 type BaseModel struct {
-	ID          int       `gorm:"primary_key;AUTO_INCREMENT" json:"id"`
-	CreatedTime time.Time `gorm:"default:null" json:"createdTime"`
-	UpdatedTime time.Time `gorm:"default:null" json:"updatedTime"`
+	ID          int            `gorm:"primary_key;AUTO_INCREMENT" json:"id"`
+	CreatedTime utils.JSONTime `gorm:"default:null" json:"createdTime"`
+	UpdatedTime utils.JSONTime `gorm:"default:null" json:"updatedTime"`
 }
 
 // Setup initializes the database instance

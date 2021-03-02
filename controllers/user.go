@@ -5,6 +5,7 @@ import (
 	"GinDemo/dto"
 	"GinDemo/models"
 	"GinDemo/service"
+	"GinDemo/utils"
 	"GinDemo/utils/logger"
 	"github.com/gin-gonic/gin"
 	"strconv"
@@ -23,7 +24,7 @@ func UserRouterRegister(router *gin.RouterGroup) {
 	router.POST("/", e.Wrapper(user.UserAdd))
 	router.DELETE("/:userId", e.Wrapper(user.UserDel))
 	router.PUT("/:userId", e.Wrapper(user.UserUpdate))
-	router.GET("/test", e.Wrapper(user.UserTest))
+	router.GET("/:userId", e.Wrapper(user.UserDetail))
 }
 
 func (u *UserController) UserList(c *gin.Context) interface{} {
@@ -44,7 +45,7 @@ func (u *UserController) UserList(c *gin.Context) interface{} {
 	res, err := u.userService.ListUser(num, size, params)
 	if err != nil {
 		logger.Error(err)
-		return e.ServerError()
+		return e.ServerError(err.Error())
 	}
 	return res
 }
@@ -65,7 +66,7 @@ func (u *UserController) UserAdd(c *gin.Context) interface{} {
 		if err != nil {
 			return e.ParameterError(err.Error())
 		}
-		user.Birthday = &bir
+		user.Birthday = &utils.JSONTime{Time: bir}
 	}
 
 	err := u.userService.CreateUser(user)
@@ -80,7 +81,7 @@ func (u *UserController) UserDel(c *gin.Context) interface{} {
 	err := u.userService.DelByUserId(userId)
 	if err != nil {
 		logger.Error(err)
-		return e.ServerError()
+		return e.ServerError(err.Error())
 	}
 	return "success"
 }
@@ -94,7 +95,7 @@ func (u *UserController) UserUpdate(c *gin.Context) interface{} {
 	err := u.userService.UpdateByUserId(userId, params)
 	if err != nil {
 		logger.Error(err)
-		return e.ServerError()
+		return e.ServerError(err.Error())
 	}
 	return "success"
 }
@@ -106,7 +107,17 @@ func (u *UserController) UserTest(c *gin.Context) interface{} {
 	}
 	res, err := u.userService.SearchUser(param)
 	if err != nil {
-		return e.ServerError()
+		return e.ServerError(err.Error())
 	}
 	return res
+}
+
+func (u *UserController) UserDetail(c *gin.Context) interface{} {
+	userId, _ := strconv.Atoi(c.Param("userId"))
+	user, err := u.userService.Detail(userId)
+	if err != nil {
+		logger.Error(err)
+		return e.ServerError(err.Error())
+	}
+	return user
 }

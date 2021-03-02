@@ -53,3 +53,13 @@ func (d *UserDao) SearchUser(params map[string]interface{}) ([]*m.User, error) {
 	}
 	return users, nil
 }
+
+func (d *UserDao) DetailUser(userId int) (*m.User, error) {
+	user := &m.User{}
+	user.BaseModel.ID = userId
+	err := m.DB.Find(&user).Error
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
+}

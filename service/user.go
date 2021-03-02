@@ -11,6 +11,7 @@ type UserService interface {
 	DelByUserId(userId int) error
 	UpdateByUserId(userId int, params map[string]interface{}) error
 	SearchUser(params map[string]interface{}) ([]*models.User, error)
+	Detail(userId int) (*models.User, error)
 }
 
 type userService struct {
@@ -45,4 +46,8 @@ func (u *userService) UpdateByUserId(userId int, params map[string]interface{}) 
 
 func (u *userService) SearchUser(params map[string]interface{}) ([]*models.User, error) {
 	return u.userDao.SearchUser(params)
+}
+
+func (u *userService) Detail(userId int) (*models.User, error) {
+	return u.userDao.DetailUser(userId)
 }
