@@ -6,6 +6,7 @@ import (
 )
 
 type UserService interface {
+	CreateUser(o *models.User) error
 	ListUser(PageNum, PageSize int, param map[string]interface{}) ([]*models.User, error)
 	DelByUserId(userId int) error
 	UpdateByUserId(userId int, params map[string]interface{}) error
@@ -22,14 +23,8 @@ func NewUserService() UserService {
 	}
 }
 
-func (u *userService) CreateUser(o models.User) error {
-	user := &models.User{
-		Username: o.Username,
-		Password: o.Password,
-		Name:     o.Name,
-		Birthday: o.Birthday,
-	}
-	if err := u.userDao.AddUser(user); err != nil {
+func (u *userService) CreateUser(o *models.User) error {
+	if err := u.userDao.AddUser(o); err != nil {
 		return err
 	}
 	return nil
