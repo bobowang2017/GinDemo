@@ -13,8 +13,8 @@ var DB *gorm.DB
 
 type BaseModel struct {
 	ID          int       `gorm:"primary_key;AUTO_INCREMENT" json:"id"`
-	CreatedTime time.Time `gorm:"default:null"`
-	UpdatedTime time.Time `gorm:"default:null"`
+	CreatedTime time.Time `gorm:"default:null" json:"createdTime"`
+	UpdatedTime time.Time `gorm:"default:null" json:"updatedTime"`
 }
 
 // Setup initializes the database instance

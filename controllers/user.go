@@ -3,10 +3,12 @@ package controllers
 import (
 	"GinDemo/common/e"
 	"GinDemo/dto"
+	"GinDemo/models"
 	"GinDemo/service"
 	"GinDemo/utils/logger"
 	"github.com/gin-gonic/gin"
 	"strconv"
+	"time"
 )
 
 type UserController struct {
@@ -48,7 +50,26 @@ func (u *UserController) UserList(c *gin.Context) interface{} {
 }
 
 func (u *UserController) UserAdd(c *gin.Context) interface{} {
-	if err := c.BindJSON(&dto.UserDto{}); err != nil {
+	uDto := dto.UserDto{}
+	if err := c.BindJSON(&uDto); err != nil {
+		return e.ParameterError(err.Error())
+	}
+	user := &models.User{
+		Username: uDto.Username,
+		Password: uDto.Password,
+		Name:     uDto.Name,
+		Sex:      uDto.Sex,
+	}
+	if uDto.Birthday != "" {
+		bir, err := time.ParseInLocation("2006-01-02", uDto.Birthday, time.Local)
+		if err != nil {
+			return e.ParameterError(err.Error())
+		}
+		user.Birthday = &bir
+	}
+
+	err := u.userService.CreateUser(user)
+	if err != nil {
 		return e.ParameterError(err.Error())
 	}
 	return "success"
