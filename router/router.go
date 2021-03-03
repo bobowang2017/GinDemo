@@ -22,15 +22,6 @@ func InitRouter() *gin.Engine {
 		c.UserRouterRegister(userRouter)
 	}
 
-	appRouter := router.Group("api/v1/apps")
-	{
-		appRouter.GET("/", func(c *gin.Context) {
-			c.JSON(200, gin.H{
-				"message": "Apps",
-			})
-		})
-	}
-
 	projectRouter := router.Group("api/v1/projects")
 	{
 		c.ProjectRouterRegister(projectRouter)

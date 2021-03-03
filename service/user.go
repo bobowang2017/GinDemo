@@ -5,7 +5,7 @@ import (
 	"GinDemo/models"
 )
 
-type UserService interface {
+type IUserService interface {
 	CreateUser(o *models.User) error
 	ListUser(PageNum, PageSize int, param map[string]interface{}) ([]*models.User, error)
 	DelByUserId(userId int) error
@@ -18,7 +18,7 @@ type userService struct {
 	userDao *dao.UserDao
 }
 
-func NewUserService() UserService {
+func NewUserService() IUserService {
 	return &userService{
 		dao.NewUserDao(),
 	}

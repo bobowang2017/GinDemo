@@ -14,7 +14,7 @@ import (
 )
 
 type UserController struct {
-	userService service.UserService
+	userService service.IUserService
 }
 
 func UserRouterRegister(router *gin.RouterGroup) {
