@@ -8,6 +8,7 @@ import (
 	"GinDemo/utils"
 	"GinDemo/utils/logger"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"strconv"
 	"time"
 )
@@ -51,9 +52,9 @@ func (u *UserController) UserList(c *gin.Context) interface{} {
 }
 
 func (u *UserController) UserAdd(c *gin.Context) interface{} {
-	uDto := dto.UserDto{}
-	if err := c.BindJSON(&uDto); err != nil {
-		return e.ParameterError(err.Error())
+	uDto := &dto.UserDto{}
+	if err := c.BindJSON(uDto); err != nil {
+		return e.ParameterError(uDto.GetError(uDto, err.(validator.ValidationErrors)))
 	}
 	user := &models.User{
 		Username: uDto.Username,
