@@ -6,10 +6,7 @@ import (
 	"strings"
 )
 
-type ValidateError struct {
-}
-
-func (v *ValidateError) GetError(dto interface{}, err validator.ValidationErrors) string {
+func GetError(dto interface{}, err validator.ValidationErrors) string {
 	errInfo := err[0]
 	refUser := reflect.ValueOf(dto)
 	methodName := "Validate" + strings.Split(errInfo.Namespace(), ".")[1]

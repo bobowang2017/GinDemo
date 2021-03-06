@@ -1,12 +1,10 @@
 package dto
 
 import (
-	"GinDemo/utils"
 	"github.com/go-playground/validator/v10"
 )
 
 type UserDto struct {
-	utils.ValidateError
 	PageNum  int
 	PageSize int
 	Username string `binding:"required"`

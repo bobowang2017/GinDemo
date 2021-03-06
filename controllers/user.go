@@ -54,7 +54,7 @@ func (u *UserController) UserList(c *gin.Context) interface{} {
 func (u *UserController) UserAdd(c *gin.Context) interface{} {
 	uDto := &dto.UserDto{}
 	if err := c.BindJSON(uDto); err != nil {
-		return e.ParameterError(uDto.GetError(uDto, err.(validator.ValidationErrors)))
+		return e.ParameterError(utils.GetError(uDto, err.(validator.ValidationErrors)))
 	}
 	user := &models.User{
 		Username: uDto.Username,
