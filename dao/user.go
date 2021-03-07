@@ -63,3 +63,26 @@ func (d *UserDao) DetailUser(userId int) (*m.User, error) {
 	}
 	return user, nil
 }
+
+type UserAddrDao struct {
+}
+
+func NewUserAddressDao() *UserAddrDao {
+	return &UserAddrDao{}
+}
+
+func (u *UserAddrDao) SearchUserAddress(params map[string]interface{}) ([]*m.UserAddress, error) {
+	var userAddr []*m.UserAddress
+	err := m.DB.Where(params).Find(&userAddr).Error
+	if err != nil {
+		return nil, err
+	}
+	return userAddr, nil
+}
+
+func (u *UserAddrDao) AddUserAddr(userAddr *m.UserAddress) error {
+	if err := m.DB.Create(userAddr).Error; err != nil {
+		return err
+	}
+	return nil
+}

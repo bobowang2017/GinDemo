@@ -20,6 +20,7 @@ func InitRouter() *gin.Engine {
 	{
 		//userRouter.Use(middlewares.Auth())
 		c.UserRouterRegister(userRouter)
+		c.UserAddressRouterRegister(userRouter)
 	}
 
 	projectRouter := router.Group("api/v1/projects")

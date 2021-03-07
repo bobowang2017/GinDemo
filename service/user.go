@@ -5,6 +5,7 @@ import (
 	"GinDemo/models"
 )
 
+//用户模块接口定义
 type IUserService interface {
 	CreateUser(o *models.User) error
 	ListUser(PageNum, PageSize int, param map[string]interface{}) ([]*models.User, error)
@@ -14,6 +15,7 @@ type IUserService interface {
 	Detail(userId int) (*models.User, error)
 }
 
+//用户模块接口实现
 type userService struct {
 	userDao *dao.UserDao
 }
@@ -50,4 +52,31 @@ func (u *userService) SearchUser(params map[string]interface{}) ([]*models.User,
 
 func (u *userService) Detail(userId int) (*models.User, error) {
 	return u.userDao.DetailUser(userId)
+}
+
+//用户收件地址模块接口定义
+type IUserAddrService interface {
+	ListByUserId(userId int) ([]*models.UserAddress, error)
+	CreateUserAddr(u *models.UserAddress) error
+}
+
+//用户收件地址模块接口实现
+type userAddrService struct {
+	userAddressDao *dao.UserAddrDao
+}
+
+func NewUserAddressService() IUserAddrService {
+	return &userAddrService{
+		dao.NewUserAddressDao(),
+	}
+}
+
+func (u *userAddrService) ListByUserId(userId int) ([]*models.UserAddress, error) {
+	param := make(map[string]interface{})
+	param["user_id"] = userId
+	return u.userAddressDao.SearchUserAddress(param)
+}
+
+func (u *userAddrService) CreateUserAddr(m *models.UserAddress) error {
+	return u.userAddressDao.AddUserAddr(m)
 }

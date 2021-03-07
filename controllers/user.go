@@ -8,7 +8,6 @@ import (
 	"GinDemo/utils"
 	"GinDemo/utils/logger"
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
 	"strconv"
 	"time"
 )
@@ -54,7 +53,7 @@ func (u *UserController) UserList(c *gin.Context) interface{} {
 func (u *UserController) UserAdd(c *gin.Context) interface{} {
 	uDto := &dto.UserDto{}
 	if err := c.BindJSON(uDto); err != nil {
-		return e.ParameterError(utils.GetError(uDto, err.(validator.ValidationErrors)))
+		return e.ParameterError(err.Error())
 	}
 	user := &models.User{
 		Username: uDto.Username,
@@ -121,4 +120,50 @@ func (u *UserController) UserDetail(c *gin.Context) interface{} {
 		return e.ServerError(err.Error())
 	}
 	return user
+}
+
+type UserAddrCtrl struct {
+	userAddrService service.IUserAddrService
+}
+
+func UserAddressRouterRegister(router *gin.RouterGroup) {
+	userAddr := UserAddrCtrl{
+		service.NewUserAddressService(),
+	}
+	router.GET("/:userId/addresses", e.Wrapper(userAddr.UserAddrList))
+	router.POST("/:userId/addresses", e.Wrapper(userAddr.UserAddrAdd))
+
+}
+
+func (u *UserAddrCtrl) UserAddrList(c *gin.Context) interface{} {
+	userId, _ := strconv.Atoi(c.Param("userId"))
+	res, err := u.userAddrService.ListByUserId(userId)
+	if err != nil {
+		return e.ServerError(err.Error())
+	}
+	return res
+}
+
+func (u *UserAddrCtrl) UserAddrAdd(c *gin.Context) interface{} {
+	userId, _ := strconv.Atoi(c.Param("userId"))
+	uaDto := &dto.UserAddrDto{}
+	if err := c.BindJSON(uaDto); err != nil {
+		return e.ParameterError(err.Error())
+	}
+	ua := &models.UserAddress{
+		UserId:    userId,
+		Consignee: uaDto.Consignee,
+		Province:  uaDto.Province,
+		City:      uaDto.City,
+		District:  uaDto.District,
+		Street:    uaDto.Street,
+		Zipcode:   uaDto.Zipcode,
+		Mobile:    uaDto.Mobile,
+		Default:   uaDto.Default,
+	}
+	err := u.userAddrService.CreateUserAddr(ua)
+	if err != nil {
+		return e.ServerError(err.Error())
+	}
+	return "success"
 }
