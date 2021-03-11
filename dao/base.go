@@ -20,11 +20,7 @@ func (b *BaseDao) checkImplTableName(v models.TableNameAble) error {
 }
 
 func (b *BaseDao) checkId(v models.TableNameAble) bool {
-	val := reflect.ValueOf(v).Elem().FieldByName("ID").Int()
-	if val == 0 {
-		return false
-	}
-	return true
+	return reflect.ValueOf(v).Elem().FieldByName("ID").IsValid()
 }
 
 func (b *BaseDao) Add(v models.TableNameAble) error {
