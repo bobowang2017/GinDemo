@@ -3,6 +3,7 @@ package dao
 import m "GinDemo/models"
 
 type UserDao struct {
+	BaseDao
 }
 
 func NewUserDao() *UserDao {
@@ -27,8 +28,11 @@ func (d *UserDao) ListUser(PageNum, PageSize int, params map[string]interface{})
 
 func (d *UserDao) DeleteById(userId int) error {
 	user := m.User{}
-	user.BaseModel.ID = userId
-	err := m.DB.Delete(&user).Error
+	//user.BaseModel.ID = userId
+	user.Name = "wangxiangbo"
+	sex := 0
+	user.Sex = &sex
+	err := d.DeleteByCondition(&user)
 	if err != nil {
 		return err
 	}
