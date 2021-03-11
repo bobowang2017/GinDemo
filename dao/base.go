@@ -5,6 +5,7 @@ import (
 	"GinDemo/utils/logger"
 	"errors"
 	"fmt"
+	"reflect"
 )
 
 type BaseDao struct {
@@ -18,6 +19,14 @@ func (b *BaseDao) checkImplTableName(v models.TableNameAble) error {
 	return nil
 }
 
+func (b *BaseDao) checkId(v models.TableNameAble) bool {
+	val := reflect.ValueOf(v).Elem().FieldByName("ID").Int()
+	if val == 0 {
+		return false
+	}
+	return true
+}
+
 func (b *BaseDao) Add(v models.TableNameAble) error {
 	if err := b.checkImplTableName(v); err != nil {
 		return err
@@ -29,9 +38,12 @@ func (b *BaseDao) Add(v models.TableNameAble) error {
 	return nil
 }
 
-func (b *BaseDao) DeleteById(v models.TableNameAble) error {
+func (b *BaseDao) DeleteByIds(v models.TableNameAble) error {
 	if err := b.checkImplTableName(v); err != nil {
 		return err
+	}
+	if !b.checkId(v) {
+		return errors.New(fmt.Sprintf("No ID Exist in %s", v.TableName()))
 	}
 	err := models.DB.Table(v.TableName()).Where(v).Delete(v).Error
 	if err != nil {
@@ -51,9 +63,16 @@ func (b *BaseDao) DeleteByCondition(v models.TableNameAble) error {
 	return nil
 }
 
-func (b *BaseDao) Update(v models.TableNameAble) error {
+func (b *BaseDao) UpdateById(v models.TableNameAble, param map[string]interface{}) error {
 	if err := b.checkImplTableName(v); err != nil {
 		return err
+	}
+	if !b.checkId(v) {
+		return errors.New(fmt.Sprintf("No ID Exist in %s", v.TableName()))
+	}
+	err := models.DB.Table(v.TableName()).Where(v).Update(param).Error
+	if err != nil {
+		return errors.New(fmt.Sprintf("Failed to save %s, the value is %+v", v.TableName(), v))
 	}
 	return nil
 }
