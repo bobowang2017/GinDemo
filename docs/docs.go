@@ -106,16 +106,51 @@ var doc = `{
                         "in": "query"
                     },
                     {
-                        "type": "string",
                         "description": "结束时间",
-                        "name": "end_time",
-                        "in": "query"
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/dto.UserDto"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": ""
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.UserDto": {
+            "type": "object",
+            "required": [
+                "password",
+                "sex",
+                "username"
+            ],
+            "properties": {
+                "birthday": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "pageNum": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "sex": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
                 }
             }
         }

@@ -4,6 +4,7 @@ import (
 	"GinDemo/config"
 	"GinDemo/dao"
 	"GinDemo/models"
+	"GinDemo/utils"
 	"GinDemo/utils/logger"
 	"GinDemo/utils/redis"
 	"fmt"
@@ -24,5 +25,14 @@ func TestUserList(t *testing.T) {
 	if err != nil {
 		fmt.Println(err)
 	}
+	fmt.Println(res)
+}
+
+func TestHello(t *testing.T) {
+	param := map[string]interface{}{
+		"hello": "123",
+		"world": 123.56,
+	}
+	res := utils.GetInt64FromMap(param, "world", 456)
 	fmt.Println(res)
 }

@@ -1,4 +1,26 @@
 basePath: /v1
+definitions:
+  dto.UserDto:
+    properties:
+      birthday:
+        type: string
+      name:
+        type: string
+      pageNum:
+        type: integer
+      pageSize:
+        type: integer
+      password:
+        type: string
+      sex:
+        type: integer
+      username:
+        type: string
+    required:
+    - password
+    - sex
+    - username
+    type: object
 host: petstore.swagger.io
 info:
   contact:
@@ -61,9 +83,10 @@ paths:
         name: start_time
         type: string
       - description: 结束时间
-        in: query
-        name: end_time
-        type: string
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/dto.UserDto'
       responses:
         "200":
           description: ""
