@@ -13,6 +13,17 @@ func ProjectRouterRegister(router *gin.RouterGroup) {
 	router.GET("/", project.ProjectList)
 }
 
+// @Title 项目列表
+// @Author wangxiangbo
+// @Description 查询项目列表
+// @Tags Project
+// @Param description formData string false "操作描述"
+// @Param start_time formData string false "开始时间"
+// @Param end_time formData string false "结束时间"
+// @Param page formData string true "页数"
+// @Param size formData string true "数据条数"
+// @Success 200
+// @Router	/api/v1/projects [get]
 func (p *ProjectController) ProjectList(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "Project List",

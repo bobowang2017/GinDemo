@@ -1,0 +1,72 @@
+basePath: /v1
+host: petstore.swagger.io
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server Petstore server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Hello World
+  version: "1.0"
+paths:
+  /api/v1/projects:
+    get:
+      description: 查询项目列表
+      parameters:
+      - description: 操作描述
+        in: formData
+        name: description
+        type: string
+      - description: 开始时间
+        in: formData
+        name: start_time
+        type: string
+      - description: 结束时间
+        in: formData
+        name: end_time
+        type: string
+      - description: 页数
+        in: formData
+        name: page
+        required: true
+        type: string
+      - description: 数据条数
+        in: formData
+        name: size
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+      tags:
+      - Project
+  /api/v1/users:
+    get:
+      description: 查询用户列表
+      parameters:
+      - description: 操作者
+        in: query
+        name: operator
+        type: string
+      - description: 操作描述
+        in: query
+        name: description
+        type: string
+      - description: 开始时间
+        in: query
+        name: start_time
+        type: string
+      - description: 结束时间
+        in: query
+        name: end_time
+        type: string
+      responses:
+        "200":
+          description: ""
+      tags:
+      - User
+swagger: "2.0"

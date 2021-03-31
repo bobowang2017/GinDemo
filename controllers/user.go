@@ -27,6 +27,16 @@ func UserRouterRegister(router *gin.RouterGroup) {
 	router.GET("/:userId", e.Wrapper(user.UserDetail))
 }
 
+// @Title 用户
+// @Author wangxiangbo
+// @Description 查询用户列表
+// @Tags User
+// @Param operator query string false "操作者"
+// @Param description query string false "操作描述"
+// @Param start_time query string false "开始时间"
+// @Param end_time query string false "结束时间"
+// @Success 200
+// @Router	/api/v1/users [get]
 func (u *UserController) UserList(c *gin.Context) interface{} {
 	pageNum := c.DefaultQuery("PageNum", "1")
 	pageSize := c.DefaultQuery("PageSize", "10")
