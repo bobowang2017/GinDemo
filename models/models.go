@@ -18,6 +18,10 @@ type BaseModel struct {
 	UpdatedTime utils.JSONTime `gorm:"default:null" json:"updatedTime"`
 }
 
+type TableNameAble interface {
+	TableName() string
+}
+
 // Setup initializes the database instance
 func Setup() {
 	var err error

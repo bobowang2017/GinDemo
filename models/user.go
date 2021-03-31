@@ -14,6 +14,10 @@ type User struct {
 	Birthday *utils.JSONTime `json:"birthday"`
 }
 
+func (u *User) TableName() string {
+	return "user"
+}
+
 // UserAddress   用户收件地址对象Model信息
 type UserAddress struct {
 	BaseModel
