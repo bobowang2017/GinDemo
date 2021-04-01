@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"GinDemo/common/e"
-	"GinDemo/dto"
+	"GinDemo/controllers/dto"
 	"GinDemo/models"
 	"GinDemo/service"
 	"GinDemo/utils"
