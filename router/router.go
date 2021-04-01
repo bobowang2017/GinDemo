@@ -9,7 +9,7 @@ import (
 func InitRouter() *gin.Engine {
 	router := gin.New()
 	// 要在路由组之前全局使用「跨域中间件」, 否则OPTIONS会返回404
-	router.Use(middlewares.Cors())
+	router.Use(middlewares.Cors(), middlewares.Recover)
 
 	testRouter := router.Group("/api/v1")
 	{
@@ -32,6 +32,6 @@ func InitRouter() *gin.Engine {
 	{
 		c.CollectorRouterRegister(collectorRouter)
 	}
-
+	router.Use(middlewares.Auth())
 	return router
 }

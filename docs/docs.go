@@ -18,18 +18,13 @@ var doc = `{
     "info": {
         "description": "{{.Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "http://127.0.0.1:8080",
-        "contact": {
-            "name": "API Support",
-            "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
-        },
+        "contact": {},
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/collectors": {
+        "/collectors": {
             "get": {
                 "description": "查询采集器列表",
                 "tags": [
@@ -78,7 +73,29 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/projects": {
+        "/collectors/{id}": {
+            "delete": {
+                "description": "删除采集器",
+                "tags": [
+                    "Collector"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "采集器ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/projects": {
             "get": {
                 "description": "查询项目列表",
                 "tags": [
@@ -125,7 +142,7 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/users": {
+        "/users": {
             "get": {
                 "description": "查询用户列表",
                 "tags": [
@@ -247,11 +264,11 @@ type swaggerInfo struct {
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
 	Version:     "1.0",
-	Host:        "petstore.swagger.io",
+	Host:        "127.0.0.1:8080",
 	BasePath:    "/api/v1",
 	Schemes:     []string{},
-	Title:       "GinDemo",
-	Description: "This is a sample server Petstore server.",
+	Title:       "gin-demo",
+	Description: "",
 }
 
 type s struct{}

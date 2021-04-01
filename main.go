@@ -18,30 +18,15 @@ func SetUp() {
 	models.Setup()
 }
 
-// @title GinDemo
+// @title gin-demo
 // @version 1.0
-// @description This is a sample server Petstore server.
-// @termsOfService http://127.0.0.1:8080
-
-// @contact.name API Support
-// @contact.url http://www.swagger.io/support
-// @contact.email support@swagger.io
-
-// @host petstore.swagger.io
+// @host 127.0.0.1:8080
 // @BasePath /api/v1
 func main() {
 	SetUp()
-	//c := cron.New()
-	//c.AddFunc("* * * * * *", func() {
-	//	log.Println("Run models.CleanAllTag...")
-	//})
-	//c.AddFunc("* * * * * *", func() {
-	//	log.Println("Run models.CleanAllArticle...")
-	//})
-
-	//c.Start()
 	routers := router.InitRouter()
-	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json") // The url pointing to API definition
+	// The url pointing to API definition
+	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json")
 	routers.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 	routers.Run()
 }

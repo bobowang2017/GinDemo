@@ -1,20 +1,14 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is a sample server Petstore server.",
-        "title": "GinDemo",
-        "termsOfService": "http://127.0.0.1:8080",
-        "contact": {
-            "name": "API Support",
-            "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
-        },
+        "title": "gin-demo",
+        "contact": {},
         "version": "1.0"
     },
-    "host": "petstore.swagger.io",
+    "host": "127.0.0.1:8080",
     "basePath": "/api/v1",
     "paths": {
-        "/api/v1/collectors": {
+        "/collectors": {
             "get": {
                 "description": "查询采集器列表",
                 "tags": [
@@ -63,7 +57,29 @@
                 }
             }
         },
-        "/api/v1/projects": {
+        "/collectors/{id}": {
+            "delete": {
+                "description": "删除采集器",
+                "tags": [
+                    "Collector"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "采集器ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/projects": {
             "get": {
                 "description": "查询项目列表",
                 "tags": [
@@ -110,7 +126,7 @@
                 }
             }
         },
-        "/api/v1/users": {
+        "/users": {
             "get": {
                 "description": "查询用户列表",
                 "tags": [

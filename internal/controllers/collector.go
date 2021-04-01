@@ -30,7 +30,7 @@ func CollectorRouterRegister(router *gin.RouterGroup) {
 // @Param PageNum query int false "页数"
 // @Param PageSize query int false "页大小"
 // @Success 200
-// @Router	/api/v1/collectors [get]
+// @Router	/collectors [get]
 func (p *CollectorController) CollectorList(c *gin.Context) interface{} {
 	pageNum := c.DefaultQuery("PageNum", "1")
 	pageSize := c.DefaultQuery("PageSize", "10")
@@ -49,7 +49,7 @@ func (p *CollectorController) CollectorList(c *gin.Context) interface{} {
 // @Tags Collector
 // @Param body body dto.CollectorDto true "创建参数"
 // @Success 200
-// @Router	/api/v1/collectors [post]
+// @Router	/collectors [post]
 func (p *CollectorController) CollectorAdd(c *gin.Context) interface{} {
 	cDto := &dto.CollectorDto{}
 	if err := c.BindJSON(cDto); err != nil {
@@ -80,6 +80,12 @@ func (p *CollectorController) CollectorAdd(c *gin.Context) interface{} {
 	return "success"
 }
 
+// @Title 采集器
+// @Description 删除采集器
+// @Tags Collector
+// @Param id path int true "采集器ID"
+// @Success 200
+// @Router	/collectors/{id} [delete]
 func (p *CollectorController) CollectorDelete(c *gin.Context) interface{} {
 	strId := c.Param("id")
 	id, err := strconv.Atoi(strId)

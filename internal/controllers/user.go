@@ -36,7 +36,7 @@ func UserRouterRegister(router *gin.RouterGroup) {
 // @Param start_time query string false "开始时间"
 // @Param end_time query string false "结束时间"
 // @Success 200
-// @Router	/api/v1/users [get]
+// @Router	/users [get]
 func (u *UserController) UserList(c *gin.Context) interface{} {
 	pageNum := c.DefaultQuery("PageNum", "1")
 	pageSize := c.DefaultQuery("PageSize", "10")

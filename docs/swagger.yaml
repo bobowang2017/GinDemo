@@ -45,18 +45,13 @@ definitions:
     - planId
     - projectId
     type: object
-host: petstore.swagger.io
+host: 127.0.0.1:8080
 info:
-  contact:
-    email: support@swagger.io
-    name: API Support
-    url: http://www.swagger.io/support
-  description: This is a sample server Petstore server.
-  termsOfService: http://127.0.0.1:8080
-  title: GinDemo
+  contact: {}
+  title: gin-demo
   version: "1.0"
 paths:
-  /api/v1/collectors:
+  /collectors:
     get:
       description: 查询采集器列表
       parameters:
@@ -87,7 +82,21 @@ paths:
           description: ""
       tags:
       - Collector
-  /api/v1/projects:
+  /collectors/{id}:
+    delete:
+      description: 删除采集器
+      parameters:
+      - description: 采集器ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: ""
+      tags:
+      - Collector
+  /projects:
     get:
       description: 查询项目列表
       parameters:
@@ -118,7 +127,7 @@ paths:
           description: ""
       tags:
       - Project
-  /api/v1/users:
+  /users:
     get:
       description: 查询用户列表
       parameters:

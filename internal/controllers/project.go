@@ -23,7 +23,7 @@ func ProjectRouterRegister(router *gin.RouterGroup) {
 // @Param page formData string true "页数"
 // @Param size formData string true "数据条数"
 // @Success 200
-// @Router	/api/v1/projects [get]
+// @Router	/projects [get]
 func (p *ProjectController) ProjectList(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "Project List",
