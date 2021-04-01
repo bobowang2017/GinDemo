@@ -1,12 +1,12 @@
 package tests
 
 import (
+	"GinDemo/common/utils"
+	"GinDemo/common/utils/logger"
+	"GinDemo/common/utils/redis"
 	"GinDemo/config"
-	"GinDemo/dao"
-	"GinDemo/models"
-	"GinDemo/utils"
-	"GinDemo/utils/logger"
-	"GinDemo/utils/redis"
+	"GinDemo/internal/dao"
+	"GinDemo/internal/models"
 	"fmt"
 	"testing"
 )

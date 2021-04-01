@@ -2,11 +2,11 @@ package controllers
 
 import (
 	"GinDemo/common/e"
-	"GinDemo/controllers/dto"
-	"GinDemo/models"
-	"GinDemo/service"
-	"GinDemo/utils"
-	"GinDemo/utils/logger"
+	"GinDemo/common/utils"
+	"GinDemo/common/utils/logger"
+	"GinDemo/internal/dto"
+	"GinDemo/internal/models"
+	"GinDemo/internal/service"
 	"github.com/gin-gonic/gin"
 	"strconv"
 	"time"

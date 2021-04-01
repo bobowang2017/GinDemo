@@ -18,21 +18,66 @@ var doc = `{
     "info": {
         "description": "{{.Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "http://swagger.io/terms/",
+        "termsOfService": "http://127.0.0.1:8080",
         "contact": {
             "name": "API Support",
             "url": "http://www.swagger.io/support",
             "email": "support@swagger.io"
-        },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
         },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/collectors": {
+            "get": {
+                "description": "查询采集器列表",
+                "tags": [
+                    "Collector"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "页数",
+                        "name": "PageNum",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页大小",
+                        "name": "PageSize",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "description": "创建采集器",
+                "tags": [
+                    "Collector"
+                ],
+                "parameters": [
+                    {
+                        "description": "创建参数",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CollectorDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/api/v1/projects": {
             "get": {
                 "description": "查询项目列表",
@@ -106,12 +151,10 @@ var doc = `{
                         "in": "query"
                     },
                     {
+                        "type": "string",
                         "description": "结束时间",
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "$ref": "#/definitions/dto.UserDto"
-                        }
+                        "name": "end_time",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -123,33 +166,68 @@ var doc = `{
         }
     },
     "definitions": {
-        "dto.UserDto": {
+        "dto.CollectorDto": {
             "type": "object",
             "required": [
-                "password",
-                "sex",
-                "username"
+                "cluster",
+                "envId",
+                "name",
+                "planId",
+                "projectId"
             ],
             "properties": {
-                "birthday": {
+                "alertCnt": {
+                    "type": "integer"
+                },
+                "alertUrl": {
+                    "type": "string"
+                },
+                "appId": {
+                    "type": "integer"
+                },
+                "cluster": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "enabled": {
+                    "type": "integer"
+                },
+                "envId": {
+                    "type": "integer"
+                },
+                "envName": {
+                    "type": "string"
+                },
+                "execCnt": {
+                    "type": "integer"
+                },
+                "heartBeatInterval": {
+                    "type": "integer"
+                },
+                "heartBeatUrl": {
+                    "type": "string"
+                },
+                "metricUrl": {
                     "type": "string"
                 },
                 "name": {
                     "type": "string"
                 },
-                "pageNum": {
+                "planId": {
                     "type": "integer"
                 },
-                "pageSize": {
-                    "type": "integer"
-                },
-                "password": {
+                "projectCode": {
                     "type": "string"
                 },
-                "sex": {
+                "projectId": {
                     "type": "integer"
                 },
-                "username": {
+                "tokenRefreshInterval": {
+                    "type": "integer"
+                },
+                "tokenUrl": {
                     "type": "string"
                 }
             }
@@ -170,9 +248,9 @@ type swaggerInfo struct {
 var SwaggerInfo = swaggerInfo{
 	Version:     "1.0",
 	Host:        "petstore.swagger.io",
-	BasePath:    "/v1",
+	BasePath:    "/api/v1",
 	Schemes:     []string{},
-	Title:       "Hello World",
+	Title:       "GinDemo",
 	Description: "This is a sample server Petstore server.",
 }
 

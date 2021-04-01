@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"GinDemo/utils/logger"
-	"GinDemo/utils/redis"
+	"GinDemo/common/utils/logger"
+	"GinDemo/common/utils/redis"
 	"github.com/gin-gonic/gin"
 )
 

@@ -1,7 +1,7 @@
 package models
 
 import (
-	"GinDemo/utils"
+	"GinDemo/common/utils"
 )
 
 // User   用户对象Model信息

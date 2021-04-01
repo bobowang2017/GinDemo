@@ -1,6 +1,6 @@
 package dao
 
-import m "GinDemo/models"
+import m "GinDemo/internal/models"
 
 type UserDao struct {
 }

@@ -1,8 +1,8 @@
 package models
 
 import (
+	"GinDemo/common/utils"
 	"GinDemo/config"
-	"GinDemo/utils"
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"

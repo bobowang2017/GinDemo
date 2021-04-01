@@ -1,8 +1,8 @@
 package router
 
 import (
-	c "GinDemo/controllers"
-	"GinDemo/middlewares"
+	c "GinDemo/internal/controllers"
+	"GinDemo/internal/middlewares"
 	"github.com/gin-gonic/gin"
 )
 
@@ -26,6 +26,11 @@ func InitRouter() *gin.Engine {
 	projectRouter := router.Group("api/v1/projects")
 	{
 		c.ProjectRouterRegister(projectRouter)
+	}
+
+	collectorRouter := router.Group("/api/v1/collectors")
+	{
+		c.CollectorRouterRegister(collectorRouter)
 	}
 
 	return router

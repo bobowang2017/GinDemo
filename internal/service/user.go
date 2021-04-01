@@ -1,8 +1,8 @@
 package service
 
 import (
-	"GinDemo/dao"
-	"GinDemo/models"
+	"GinDemo/internal/dao"
+	"GinDemo/internal/models"
 )
 
 //用户模块接口定义
