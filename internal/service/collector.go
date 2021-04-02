@@ -1,8 +1,10 @@
 package service
 
 import (
+	"GinDemo/common/e"
 	"GinDemo/internal/dao"
 	m "GinDemo/internal/models"
+	"errors"
 )
 
 type ICollectorService interface {
@@ -21,6 +23,10 @@ func (c *collectorService) ListCollector(PageNum, PageSize int, param map[string
 }
 
 func (c *collectorService) AddCollector(m *m.Collector) error {
+	//需要对name属性进行唯一性校验
+	if c.collectorDao.CheckName(m.Name) {
+		return errors.New(e.GetMsg(e.INVALID_PARAMS))
+	}
 	return c.collectorDao.Add(m)
 }
 
