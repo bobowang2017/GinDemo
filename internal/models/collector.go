@@ -11,7 +11,7 @@ type Collector struct {
 	EnvName              string `gorm:"size:45;" json:"envName"`
 	Cluster              string `gorm:"size:45;" json:"cluster"`
 	TokenUrl             string `gorm:"size:200;" json:"tokenUrl"`
-	AppId                *int   `json:"sex"`
+	AppId                *int   `json:"appId"`
 	TokenRefreshInterval *int   `json:"tokenRefreshInterval"`
 	MetricUrl            string `gorm:"size:200;" json:"metricUrl"`
 	AlertUrl             string `gorm:"size:200;" json:"alertUrl"`
