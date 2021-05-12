@@ -1,6 +1,9 @@
 package dao
 
-import m "GinDemo/internal/models"
+import (
+	m "GinDemo/internal/models"
+	"github.com/pkg/errors"
+)
 
 type UserDao struct {
 }
@@ -20,7 +23,7 @@ func (d *UserDao) ListUser(PageNum, PageSize int, params map[string]interface{})
 	var users []*m.User
 	err := m.DB.Offset((PageNum - 1) * PageSize).Limit(PageSize).Where(params).Find(&users).Error
 	if err != nil {
-		return nil, err
+		return nil, errors.New(err.Error())
 	}
 	return users, nil
 }
