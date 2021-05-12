@@ -30,10 +30,13 @@ type App struct {
 var AppSetting = &App{}
 
 type Server struct {
-	RunMode      string
-	HttpPort     int
-	ReadTimeout  time.Duration
-	WriteTimeout time.Duration
+	RunMode         string
+	HttpPort        int
+	ReadTimeout     time.Duration
+	WriteTimeout    time.Duration
+	LogSavePath     string
+	LogMaxAge       time.Duration
+	LogRotationTime time.Duration
 }
 
 var ServerSetting = &Server{}
@@ -50,11 +53,14 @@ type Database struct {
 var DatabaseSetting = &Database{}
 
 type Redis struct {
-	Host        string
-	Password    string
-	MaxIdle     int
-	MaxActive   int
-	IdleTimeout time.Duration
+	Host           string
+	Password       string
+	MaxIdle        int
+	MaxActive      int
+	IdleTimeout    time.Duration
+	ConnectTimeout time.Duration
+	ReadTimeout    time.Duration
+	WriteTimeout   time.Duration
 }
 
 var RedisSetting = &Redis{}

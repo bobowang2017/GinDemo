@@ -3,6 +3,7 @@ package service
 import (
 	"GinDemo/internal/dao"
 	"GinDemo/internal/models"
+	"github.com/pkg/errors"
 )
 
 //用户模块接口定义
@@ -34,7 +35,8 @@ func (u *userService) CreateUser(o *models.User) error {
 }
 
 func (u *userService) ListUser(PageNum, PageSize int, param map[string]interface{}) ([]*models.User, error) {
-	return u.userDao.ListUser(PageNum, PageSize, param)
+	res, err := u.userDao.ListUser(PageNum, PageSize, param)
+	return res, errors.WithStack(err)
 }
 
 func (u *userService) DelByUserId(userId int) error {

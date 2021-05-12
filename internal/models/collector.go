@@ -1,5 +1,6 @@
 package models
 
+// Collector   采集器对象Model信息
 type Collector struct {
 	BaseModel
 	Name                 string `gorm:"size:45;not null" json:"name" `

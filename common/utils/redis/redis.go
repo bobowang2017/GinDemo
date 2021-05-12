@@ -1,6 +1,7 @@
 package redis
 
 import (
+	"GinDemo/common/utils/log"
 	"GinDemo/config"
 	"encoding/json"
 	"fmt"
@@ -17,7 +18,10 @@ func SetUp() {
 		MaxActive:   config.RedisSetting.MaxActive,
 		IdleTimeout: 2 * time.Second,
 		Dial: func() (redis.Conn, error) {
-			c, err := redis.Dial("tcp", config.RedisSetting.Host)
+			c, err := redis.Dial("tcp", config.RedisSetting.Host,
+				redis.DialConnectTimeout(config.RedisSetting.ConnectTimeout*time.Millisecond),
+				redis.DialReadTimeout(config.RedisSetting.ReadTimeout*time.Millisecond),
+				redis.DialWriteTimeout(config.RedisSetting.WriteTimeout*time.Millisecond))
 			if err != nil {
 				fmt.Println(err)
 				return nil, err
@@ -37,10 +41,34 @@ func Set(key string, data interface{}, time int) error {
 	defer conn.Close()
 	value, err := json.Marshal(data)
 	if err != nil {
+		log.Logger.Error(err.Error(), "| Redis Marshal Error")
 		return err
 	}
-	_, err = conn.Do("SET", key, value, "EX", 100)
+	if time == -1 {
+		_, err = conn.Do("SET", key, value)
+	} else {
+		_, err = conn.Do("SET", key, value, "EX", time)
+	}
 	if err != nil {
+		log.Logger.Error(err.Error(), "| Redis Set Error")
+		return err
+	}
+	return nil
+}
+
+func SetNx(key string, data interface{}, time int) error {
+	/**
+	Redis String setnx操作
+	*/
+	conn := pool.Get()
+	defer conn.Close()
+	value, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+	_, err = redis.String(conn.Do("SET", key, value, "EX", time, "NX"))
+	if err != nil {
+		log.Logger.Error(err.Error(), "| Redis SetNx Error")
 		return err
 	}
 	return nil
@@ -54,6 +82,7 @@ func Expire(key string, time int) error {
 	defer conn.Close()
 	_, err := conn.Do("EXPIRE", key, time)
 	if err != nil {
+		log.Logger.Error(err.Error(), "| Redis Expire Error")
 		return err
 	}
 	return nil
@@ -67,7 +96,7 @@ func Get(key string) (string, error) {
 	defer conn.Close()
 	res, err := redis.String(conn.Do("GET", key))
 	if err != nil {
-		fmt.Println("redis get error:", err)
+		log.Logger.Error(err.Error(), "| Redis Get Error")
 	}
 	return res, nil
 }
@@ -78,24 +107,28 @@ func Delete(key string) (bool, error) {
 	*/
 	conn := pool.Get()
 	defer conn.Close()
-	return redis.Bool(conn.Do("DEL", key))
+	res, err := redis.Bool(conn.Do("DEL", key))
+	if err != nil {
+		log.Logger.Error(err.Error(), "| Redis Delete Error")
+	}
+	return res, err
 }
 
-func Lpush(key string, data []string) error {
+func LPush(key string, data []string) error {
 	/**
-	Redis String Lpush操作
+	Redis String LPush操作
 	*/
 	conn := pool.Get()
 	defer conn.Close()
 	_, err := conn.Do("LPUSH", redis.Args{}.Add(key).AddFlat(data)...)
 	if err != nil {
-		fmt.Println("redis lpush error:", err)
+		log.Logger.Error(err.Error(), "| Redis LPush Error")
 		return err
 	}
 	return nil
 }
 
-func Hset(key, field, value string) error {
+func HSet(key, field, value string) error {
 	/**
 	Redis String Hset操作
 	*/
@@ -103,13 +136,30 @@ func Hset(key, field, value string) error {
 	defer conn.Close()
 	_, err := conn.Do("HSET", key, field, value)
 	if err != nil {
-		fmt.Println("redis hset error:", err)
+		log.Logger.Error(err.Error(), "| Redis HSet Error")
 		return err
 	}
 	return nil
 }
 
-func Hget(key, field string) (string, error) {
+func HGetAll(key string) (map[string]string, error) {
+	conn := pool.Get()
+	defer conn.Close()
+	result, err := redis.Values(conn.Do("hgetall", key))
+	if err != nil {
+		log.Logger.Error(err.Error(), "| Redis HGetAll Error")
+		return nil, err
+	}
+	data := make(map[string]string)
+	for i := 0; i < len(result); i += 2 {
+		key := string(result[i].([]byte))
+		value := string(result[i+1].([]byte))
+		data[key] = value
+	}
+	return data, nil
+}
+
+func HGet(key, field string) (string, error) {
 	/**
 	Redis String Hget操作
 	*/
@@ -117,7 +167,7 @@ func Hget(key, field string) (string, error) {
 	defer conn.Close()
 	res, err := redis.String(conn.Do("hget", key, field))
 	if err != nil {
-		fmt.Println("redis hget error", err)
+		log.Logger.Error(err.Error(), "| Redis HGet Error")
 	}
 	return res, err
 }
@@ -130,7 +180,7 @@ func IncrBy(key string, cnt int) (int64, error) {
 	defer conn.Close()
 	res, err := redis.Int64(conn.Do("INCRBY", key, cnt))
 	if err != nil {
-		fmt.Println("redis incrby error:", err)
+		log.Logger.Error(err.Error(), "| Redis IncrBy Error")
 	}
 	return res, nil
 }
@@ -143,7 +193,27 @@ func DecrBy(key string, cnt int) (int64, error) {
 	defer conn.Close()
 	res, err := redis.Int64(conn.Do("DecrBy", key, cnt))
 	if err != nil {
-		fmt.Println("redis DecrBy error:", err)
+		log.Logger.Error(err.Error(), "| Redis DecrBy Error")
 	}
 	return res, nil
+}
+
+func MDelete(keys ...string) error {
+	/**
+	Redis String MDelete
+	*/
+	conn := pool.Get()
+	defer conn.Close()
+	_ = conn.Send("MULTI")
+	for _, v := range keys {
+		if len(v) == 0 {
+			continue
+		}
+		conn.Send("DEL", v)
+	}
+	_, err := conn.Do("EXEC")
+	if err != nil {
+		log.Logger.Error(err.Error(), "| Redis MDelete Error")
+	}
+	return err
 }

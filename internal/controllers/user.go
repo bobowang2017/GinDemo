@@ -3,7 +3,7 @@ package controllers
 import (
 	"GinDemo/common/e"
 	"GinDemo/common/utils"
-	"GinDemo/common/utils/logger"
+	"GinDemo/common/utils/log"
 	"GinDemo/internal/dto"
 	"GinDemo/internal/models"
 	"GinDemo/internal/service"
@@ -51,10 +51,9 @@ func (u *UserController) UserList(c *gin.Context) interface{} {
 	if name != "" {
 		params["name"] = name
 	}
-
 	res, err := u.userService.ListUser(num, size, params)
 	if err != nil {
-		logger.Error(err)
+		log.Logger.Errorf("%+v", err)
 		return e.ServerError(err.Error())
 	}
 	return res
@@ -90,7 +89,7 @@ func (u *UserController) UserDel(c *gin.Context) interface{} {
 	userId, _ := strconv.Atoi(c.Param("userId"))
 	err := u.userService.DelByUserId(userId)
 	if err != nil {
-		logger.Error(err)
+		log.Logger.Error(err)
 		return e.ServerError(err.Error())
 	}
 	return "success"
@@ -104,7 +103,7 @@ func (u *UserController) UserUpdate(c *gin.Context) interface{} {
 	}
 	err := u.userService.UpdateByUserId(userId, params)
 	if err != nil {
-		logger.Error(err)
+		log.Logger.Error(err)
 		return e.ServerError(err.Error())
 	}
 	return "success"
@@ -126,7 +125,7 @@ func (u *UserController) UserDetail(c *gin.Context) interface{} {
 	userId, _ := strconv.Atoi(c.Param("userId"))
 	user, err := u.userService.Detail(userId)
 	if err != nil {
-		logger.Error(err)
+		log.Logger.Error(err)
 		return e.ServerError(err.Error())
 	}
 	return user
