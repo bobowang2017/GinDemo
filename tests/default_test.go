@@ -2,7 +2,7 @@ package tests
 
 import (
 	"GinDemo/common/utils"
-	"GinDemo/common/utils/logger"
+	"GinDemo/common/utils/log"
 	"GinDemo/common/utils/redis"
 	"GinDemo/config"
 	"GinDemo/internal/dao"
@@ -14,7 +14,7 @@ import (
 func SetUp() {
 	config.Setup()
 	redis.SetUp()
-	logger.Setup()
+	log.Setup()
 	models.Setup()
 }
 
