@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gomodule/redigo/redis"
+	"github.com/pkg/errors"
 	"time"
 )
 
@@ -42,7 +43,7 @@ func Set(key string, data interface{}, time int) error {
 	value, err := json.Marshal(data)
 	if err != nil {
 		log.Logger.Error(err.Error(), "| Redis Marshal Error")
-		return err
+		return errors.New(err.Error())
 	}
 	if time == -1 {
 		_, err = conn.Do("SET", key, value)
@@ -51,7 +52,7 @@ func Set(key string, data interface{}, time int) error {
 	}
 	if err != nil {
 		log.Logger.Error(err.Error(), "| Redis Set Error")
-		return err
+		return errors.New(err.Error())
 	}
 	return nil
 }
@@ -64,12 +65,12 @@ func SetNx(key string, data interface{}, time int) error {
 	defer conn.Close()
 	value, err := json.Marshal(data)
 	if err != nil {
-		return err
+		return errors.New(err.Error())
 	}
 	_, err = redis.String(conn.Do("SET", key, value, "EX", time, "NX"))
 	if err != nil {
 		log.Logger.Error(err.Error(), "| Redis SetNx Error")
-		return err
+		return errors.New(err.Error())
 	}
 	return nil
 }
@@ -83,7 +84,7 @@ func Expire(key string, time int) error {
 	_, err := conn.Do("EXPIRE", key, time)
 	if err != nil {
 		log.Logger.Error(err.Error(), "| Redis Expire Error")
-		return err
+		return errors.WithMessage(err, "| Redis Expire Error")
 	}
 	return nil
 }
@@ -123,7 +124,7 @@ func LPush(key string, data []string) error {
 	_, err := conn.Do("LPUSH", redis.Args{}.Add(key).AddFlat(data)...)
 	if err != nil {
 		log.Logger.Error(err.Error(), "| Redis LPush Error")
-		return err
+		return errors.WithMessage(err, "| Redis LPush Error")
 	}
 	return nil
 }
@@ -137,7 +138,7 @@ func HSet(key, field, value string) error {
 	_, err := conn.Do("HSET", key, field, value)
 	if err != nil {
 		log.Logger.Error(err.Error(), "| Redis HSet Error")
-		return err
+		return errors.WithMessage(err, "| Redis HSet Error")
 	}
 	return nil
 }
